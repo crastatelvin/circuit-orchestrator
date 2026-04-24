@@ -56,12 +56,20 @@ export default function WorkflowNode({
           ? `0 0 0 2px ${node.color}55`
           : "none",
         transition: "box-shadow 0.18s ease",
+        animation: isExecuting
+          ? "node-execute 0.85s ease-in-out infinite"
+          : isComplete
+          ? "node-complete 0.5s ease"
+          : "none",
       }}
     >
       <div style={{ padding: 8, borderBottom: "1px solid rgba(255,255,255,0.08)", display: "flex", gap: 8 }}>
         <span>{node.icon}</span>
         <strong style={{ fontSize: 12 }}>{node.label}</strong>
-        <button onClick={() => onDelete(node.id)} style={{ marginLeft: "auto", padding: "2px 8px" }}>
+        <button
+          onClick={() => onDelete(node.id)}
+          style={{ marginLeft: "auto", padding: "2px 8px", background: "rgba(0,0,0,0.25)" }}
+        >
           x
         </button>
       </div>

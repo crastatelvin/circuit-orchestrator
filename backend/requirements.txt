@@ -5,3 +5,7 @@ python-dotenv
 pydantic
 websockets
 httpx
+slowapi
+python-json-logger
+pytest
+pytest-asyncio

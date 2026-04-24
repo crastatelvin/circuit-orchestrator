@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import deque
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from node_executors import NODE_EXECUTORS
@@ -87,7 +87,7 @@ async def execute_workflow(workflow: dict[str, Any], broadcast_fn) -> dict[str, 
             "label": node.get("label", node_type),
             "output_preview": result.get("output", "")[:150],
             "success": not result.get("error"),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "message": f"{node.get('label', node_type)} complete",
         }
         execution_log.append(entry)

@@ -19,6 +19,7 @@ export default function ConnectionWire({ edge, nodes, isActive, isComplete, onRe
         stroke={isActive ? "#f7b267" : isComplete ? "#82ffc3" : "#7ad8ff"}
         strokeWidth={isActive ? "2.8" : "2.2"}
         strokeDasharray={isActive ? "none" : "7 5"}
+        style={isActive ? { strokeDasharray: "10 8", animation: "edge-trace 0.9s linear infinite" } : {}}
       />
       {isActive && (
         <motion.path
