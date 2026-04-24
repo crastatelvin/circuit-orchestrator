@@ -71,7 +71,12 @@ Users can:
 
 <br/>
 
-### 3) Demo GIF
+### 3) API Docs
+![API Docs](docs/media/screenshot-api-docs.png)
+
+<br/>
+
+### 4) Demo GIF
 ![CIRCUIT demo](docs/media/demo.gif)
 
 </div>
