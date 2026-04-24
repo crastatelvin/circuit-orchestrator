@@ -120,15 +120,15 @@ Users can:
 │                          FastAPI Backend                            │
 │                                                                     │
 │  main.py                                                            │
-│   ├─ CORS + optional API-key auth + rate limiting                  │
+│   ├─ CORS + optional API-key auth + rate limiting                   │
 │   ├─ /execute => workflow_engine.execute_workflow                   │
 │   ├─ /latest, /node-types                                           │
-│   └─ /ws broadcast loop                                              │
+│   └─ /ws broadcast loop                                             │
 │                                                                     │
-│  workflow_engine.py                                                  │
-│   ├─ topological execution ordering                                  │
-│   ├─ predecessor input merge                                         │
-│   └─ node-level execution logs/events                                │
+│  workflow_engine.py                                                 │
+│   ├─ topological execution ordering                                 │
+│   ├─ predecessor input merge                                        │
+│   └─ node-level execution logs/events                               │
 │                                                                     │
 │  node_executors/*.py + groq_service.py                              │
 └─────────────────────────────────────────────────────────────────────┘
@@ -319,4 +319,4 @@ See [`DECISIONS.md`](./DECISIONS.md) for architecture rationale, including:
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE).
 
-Built by Telvin Crasta · Visual orchestration · Real-time execution
+              Built by Telvin Crasta · Visual orchestration · Real-time execution
