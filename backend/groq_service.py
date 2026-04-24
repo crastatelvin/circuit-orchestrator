@@ -22,9 +22,30 @@ def call_llm(prompt: str, model: str = "llama-3.1-8b-instant") -> str:
     try:
         completion = client.chat.completions.create(
             model=model,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You must respond in English only. Do not switch languages unless explicitly asked to translate.",
+                },
+                {"role": "user", "content": prompt},
+            ],
             temperature=0.2,
         )
-        return (completion.choices[0].message.content or "").strip()
+        raw = (completion.choices[0].message.content or "").strip()
+        if not raw:
+            return ""
+        english_completion = client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Translate any given text to English. Output English only. No explanations.",
+                },
+                {"role": "user", "content": raw},
+            ],
+            temperature=0.0,
+        )
+        normalized = (english_completion.choices[0].message.content or "").strip()
+        return normalized or raw
     except Exception as exc:  # noqa: BLE001
         return f"[ERROR] {str(exc)[:200]}"
