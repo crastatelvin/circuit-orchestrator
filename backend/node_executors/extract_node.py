@@ -9,7 +9,7 @@ import json
 import re
 from typing import Any
 
-from gemini_service import call_gemini
+from groq_service import call_llm
 
 
 def execute(input_data: str, config: dict[str, Any]) -> dict[str, Any]:
@@ -18,7 +18,7 @@ def execute(input_data: str, config: dict[str, Any]) -> dict[str, Any]:
         prompt = f"Extract JSON for fields: {', '.join(fields)}\n\n{input_data[:2500]}"
     else:
         prompt = f"Extract key entities and return JSON.\n\n{input_data[:2500]}"
-    result = call_gemini(prompt)
+    result = call_llm(prompt)
     try:
         match = re.search(r"\{.*\}", result, re.DOTALL)
         parsed = json.loads(match.group(0)) if match else None

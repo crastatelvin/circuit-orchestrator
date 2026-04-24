@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from gemini_service import call_gemini
+from groq_service import call_llm
 
 
 def execute(input_data: str, config: dict[str, Any]) -> dict[str, Any]:
@@ -16,7 +16,7 @@ def execute(input_data: str, config: dict[str, Any]) -> dict[str, Any]:
     if not condition:
         return {"output": input_data, "passed": True, "node_type": "filter"}
     prompt = f"Condition: {condition}\nText: {input_data[:2000]}\nAnswer TRUE or FALSE only."
-    passed = "TRUE" in call_gemini(prompt).upper()
+    passed = "TRUE" in call_llm(prompt).upper()
     return {
         "output": input_data if (passed or pass_through) else "",
         "passed": passed,

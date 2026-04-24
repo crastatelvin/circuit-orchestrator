@@ -5,7 +5,7 @@ Visual node-based AI workflow orchestrator with live execution updates.
 ## Stack
 - Frontend: React
 - Backend: FastAPI
-- Model: Gemini (via `google-genai`)
+- Model: Groq (via `groq` Python SDK)
 
 ## Current capabilities
 - Drag and drop nodes from palette to canvas.
@@ -32,7 +32,7 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 copy .env.example .env
-# set GEMINI_API_KEY in .env
+# set GROQ_API_KEY in .env
 uvicorn main:app --reload
 ```
 
