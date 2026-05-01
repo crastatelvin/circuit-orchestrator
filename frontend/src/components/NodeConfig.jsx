@@ -106,6 +106,20 @@ export default function NodeConfig({ node, onChange }) {
           />
         </>
       )}
+      {node.type === "python" && (
+        <>
+          <label style={{ color: "#cfd5ff" }}>Python Script (output = ...)</label>
+          <textarea
+            value={node.config.script || ""}
+            onChange={(e) => update("script", e.target.value)}
+            rows={10}
+            style={{ width: "100%", fontFamily: "monospace" }}
+          />
+          <p style={{ fontSize: "0.8em", color: "var(--muted)" }}>
+            Access input via <code>input_data</code>. Set <code>output</code> to return.
+          </p>
+        </>
+      )}
     </div>
   );
 }

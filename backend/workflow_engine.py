@@ -114,5 +114,5 @@ async def execute_workflow(workflow: dict[str, Any], broadcast_fn) -> dict[str, 
         "node_outputs": node_outputs,
         "execution_log": execution_log,
         "nodes_executed": len(execution_order),
-        "success": True,
+        "success": all(not n.get("error") for n in node_outputs.values()),
     }

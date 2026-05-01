@@ -13,6 +13,7 @@ from slowapi.util import get_remote_address
 from logging_config import configure_logging
 from security import require_api_key
 from workflow_engine import execute_workflow
+from database import init_db, save_execution, get_history
 
 configure_logging()
 logger = logging.getLogger("circuit.api")
@@ -22,6 +23,7 @@ app = FastAPI(title="CIRCUIT - AI Workflow Orchestrator")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+init_db()
 
 connections: list[WebSocket] = []
 execution_store: dict[str, dict] = {}
@@ -73,6 +75,7 @@ def get_node_types() -> JSONResponse:
             {"type": "extract", "label": "Extract", "icon": "🔍", "color": "#fd79a8"},
             {"type": "transform", "label": "Transform", "icon": "⚙️", "color": "#74b9ff"},
             {"type": "filter", "label": "Filter", "icon": "🔽", "color": "#e17055"},
+            {"type": "python", "label": "Python Script", "icon": "🐍", "color": "#ffeaa7"},
             {"type": "output", "label": "Output", "icon": "📤", "color": "#55efc4"},
         ]
     )
@@ -90,6 +93,7 @@ async def execute(request: Request, body: dict, _: None = Depends(require_api_ke
     try:
         result = await execute_workflow(workflow, broadcast)
         execution_store["latest"] = result
+        save_execution(result, workflow)
         await broadcast({"event": "workflow_complete", "message": "Workflow complete"})
         logger.info(
             "workflow_execute_complete",
@@ -108,3 +112,9 @@ def latest(request: Request, _: None = Depends(require_api_key)) -> JSONResponse
     if "latest" not in execution_store:
         return JSONResponse(status_code=404, content={"error": "No execution available"})
     return JSONResponse(execution_store["latest"])
+
+
+@app.get("/history")
+@limiter.limit("30/minute")
+def history(request: Request, _: None = Depends(require_api_key)) -> JSONResponse:
+    return JSONResponse(get_history())

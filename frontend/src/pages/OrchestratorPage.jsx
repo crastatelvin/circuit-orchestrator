@@ -5,6 +5,7 @@ import NodeConfig from "../components/NodeConfig";
 import NodePalette from "../components/NodePalette";
 import ResultPanel from "../components/ResultPanel";
 import WorkflowControls from "../components/WorkflowControls";
+import HistoryPanel from "../components/HistoryPanel";
 import useWorkflow from "../hooks/useWorkflow";
 
 const THEME_STORAGE_KEY = "circuit-theme";
@@ -44,6 +45,8 @@ export default function OrchestratorPage() {
     executingNodes,
     completedNodes,
     reset,
+    importWorkflow,
+    exportWorkflow,
   } = useWorkflow();
 
   const onPortClick = useCallback(
@@ -92,6 +95,35 @@ export default function OrchestratorPage() {
     [addEdge, addNode, reset]
   );
 
+  const handleExport = useCallback(() => {
+    const data = exportWorkflow();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `circuit-workflow-${new Date().getTime()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [exportWorkflow]);
+
+  const handleImport = useCallback(
+    (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = JSON.parse(event.target.result);
+          importWorkflow(data);
+        } catch (err) {
+          alert("Invalid workflow file");
+        }
+      };
+      reader.readAsText(file);
+    },
+    [importWorkflow]
+  );
+
   return (
     <div className="app">
       <div className="topbar">
@@ -103,6 +135,12 @@ export default function OrchestratorPage() {
           <div style={{ display: "flex", gap: 8 }}>
             <button onClick={() => loadDemo("sum-translate")}>Demo: Summarize + Translate</button>
             <button onClick={() => loadDemo("prompt-classify")}>Demo: Prompt + Classify</button>
+            <div style={{ width: 1, height: 24, backgroundColor: "var(--border)", margin: "0 8px" }} />
+            <button onClick={handleExport} style={{ backgroundColor: "var(--accent)", color: "white" }}>Export JSON</button>
+            <label className="button" style={{ cursor: "pointer" }}>
+              Import JSON
+              <input type="file" onChange={handleImport} style={{ display: "none" }} accept=".json" />
+            </label>
           </div>
         </div>
         <div className="panel" style={{ minWidth: 240 }}>
@@ -140,6 +178,7 @@ export default function OrchestratorPage() {
                 <span style={{ marginLeft: 12, color: "var(--accent)" }}>Connecting from: {connectingFrom}</span>
               )}
             </div>
+          </div>
           <div className="panel" style={{ marginTop: 12 }}>
             <h3>Global Variables</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -206,6 +245,7 @@ export default function OrchestratorPage() {
           <ExecutionLog logs={executionLog} />
           <div style={{ height: 12 }} />
           <ResultPanel result={result} />
+          <HistoryPanel />
         </div>
       </div>
     </div>

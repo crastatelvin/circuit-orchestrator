@@ -13,6 +13,7 @@ const DEFAULT_CONFIGS = {
   extract: { fields: [] },
   transform: { transform_type: "formal" },
   filter: { condition: "", pass_through: true },
+  python: { script: "output = input_data.upper()" },
   output: {},
 };
 
@@ -132,6 +133,30 @@ export default function useWorkflow() {
     setVariables({});
     nodeCounter = 1;
   }, []);
+  
+  const exportWorkflow = useCallback(() => {
+    return {
+      nodes,
+      edges,
+      variables,
+      inputText,
+    };
+  }, [nodes, edges, variables, inputText]);
+
+  const importWorkflow = useCallback((data) => {
+    if (!data) return;
+    setNodes(data.nodes || []);
+    setEdges(data.edges || []);
+    setVariables(data.variables || {});
+    setInputText(data.inputText || "");
+    // Update nodeCounter to avoid ID collisions
+    const maxId = (data.nodes || []).reduce((max, node) => {
+      const match = node.id.match(/node_(\d+)/);
+      if (match) return Math.max(max, parseInt(match[1]));
+      return max;
+    }, 0);
+    nodeCounter = maxId + 1;
+  }, []);
 
   const selectedNode = useMemo(
     () => nodes.find((node) => node.id === selectedNodeId) || null,
@@ -164,6 +189,8 @@ export default function useWorkflow() {
       executingNodes,
       completedNodes,
       reset,
+      importWorkflow,
+      exportWorkflow,
     }),
     [
       nodes,
@@ -187,6 +214,8 @@ export default function useWorkflow() {
       executingNodes,
       completedNodes,
       reset,
+      importWorkflow,
+      exportWorkflow,
     ]
   );
 }
