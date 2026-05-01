@@ -49,6 +49,7 @@ async def execute_workflow(workflow: dict[str, Any], broadcast_fn) -> dict[str, 
     input_text = workflow.get("input", "")
     execution_order = _topological_layers(nodes, edges)
 
+    variables = workflow.get("variables", {})
     node_outputs: dict[str, dict[str, Any]] = {}
     execution_log: list[dict[str, Any]] = []
 
@@ -57,6 +58,14 @@ async def execute_workflow(workflow: dict[str, Any], broadcast_fn) -> dict[str, 
         node_type = node["type"]
         predecessors = [e["source"] for e in edges if e["target"] == node_id]
         current_input = _merge_inputs(predecessors, node_outputs, input_text)
+
+        # Substitute variables in config
+        config = node.get("config", {}).copy()
+        for key, value in config.items():
+            if isinstance(value, str):
+                for var_name, var_val in variables.items():
+                    value = value.replace(f"{{{{{var_name}}}}}", str(var_val))
+                config[key] = value
 
         await broadcast_fn(
             {
@@ -74,7 +83,7 @@ async def execute_workflow(workflow: dict[str, Any], broadcast_fn) -> dict[str, 
             result = {"output": current_input, "node_type": "output"}
         elif node_type in NODE_EXECUTORS:
             try:
-                result = NODE_EXECUTORS[node_type](current_input, node.get("config", {}))
+                result = NODE_EXECUTORS[node_type](current_input, config)
             except Exception as exc:  # noqa: BLE001
                 result = {"output": f"[ERROR] {str(exc)[:200]}", "error": True, "node_type": node_type}
         else:

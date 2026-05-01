@@ -20,6 +20,7 @@ export default function useWorkflow() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [inputText, setInputText] = useState("");
+  const [variables, setVariables] = useState({});
   const [result, setResult] = useState(null);
   const [executing, setExecuting] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
@@ -106,6 +107,7 @@ export default function useWorkflow() {
         nodes: nodes.map((n) => ({ id: n.id, type: n.type, label: n.label, config: n.config })),
         edges,
         input: inputText,
+        variables,
       };
       const res = await executeWorkflow(workflow);
       setResult(res);
@@ -127,6 +129,7 @@ export default function useWorkflow() {
     setCompletedNodes(new Set());
     setSelectedNodeId(null);
     setConnectingFrom(null);
+    setVariables({});
     nodeCounter = 1;
   }, []);
 
@@ -141,6 +144,8 @@ export default function useWorkflow() {
       edges,
       inputText,
       setInputText,
+      variables,
+      setVariables,
       addNode,
       addEdge,
       removeNode,
@@ -164,6 +169,8 @@ export default function useWorkflow() {
       nodes,
       edges,
       inputText,
+      variables,
+      setVariables,
       addNode,
       addEdge,
       removeNode,

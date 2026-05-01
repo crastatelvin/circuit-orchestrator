@@ -24,6 +24,8 @@ export default function OrchestratorPage() {
     edges,
     inputText,
     setInputText,
+    variables,
+    setVariables,
     addNode,
     addEdge,
     removeNode,
@@ -138,7 +140,49 @@ export default function OrchestratorPage() {
                 <span style={{ marginLeft: 12, color: "var(--accent)" }}>Connecting from: {connectingFrom}</span>
               )}
             </div>
+          <div className="panel" style={{ marginTop: 12 }}>
+            <h3>Global Variables</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {Object.entries(variables).map(([key, val]) => (
+                <div key={key} style={{ display: "flex", gap: 8 }}>
+                  <input
+                    value={key}
+                    onChange={(e) => {
+                      const newVars = { ...variables };
+                      delete newVars[key];
+                      newVars[e.target.value] = val;
+                      setVariables(newVars);
+                    }}
+                    placeholder="Key"
+                    style={{ flex: 1 }}
+                  />
+                  <input
+                    value={val}
+                    onChange={(e) => setVariables({ ...variables, [key]: e.target.value })}
+                    placeholder="Value"
+                    style={{ flex: 2 }}
+                  />
+                  <button
+                    className="danger"
+                    onClick={() => {
+                      const next = { ...variables };
+                      delete next[key];
+                      setVariables(next);
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => setVariables({ ...variables, [`var_${Object.keys(variables).length + 1}`]: "" })}
+                style={{ alignSelf: "flex-start" }}
+              >
+                + Add Variable
+              </button>
+            </div>
           </div>
+
           <div style={{ marginTop: 12 }}>
             <CircuitCanvas
               nodes={nodes}
