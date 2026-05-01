@@ -97,6 +97,11 @@ Users can:
 | 📜 **Structured JSON Logging** | Request and execution events emitted in JSON for observability |
 | 🧪 **Backend Tests** | FastAPI + workflow engine tests via pytest |
 | 🐳 **Docker Deployment** | Backend + frontend containerized with compose orchestration |
+| 🔄 **Import/Export** | Save and load workflow configurations as JSON files |
+| 🐍 **Python Scripting** | Run custom Python logic for advanced data transformation |
+| 🎯 **Model Selection** | Per-node control over different Groq LLM models |
+| 📜 **Execution History** | Persistent SQLite storage for previous workflow runs |
+| 🧩 **Variables** | Global context injection via workflow-level variables |
 
 ---
 

@@ -158,6 +158,8 @@ export default function useWorkflow() {
     nodeCounter = maxId + 1;
   }, []);
 
+  const clearLog = useCallback(() => setExecutionLog([]), []);
+
   const selectedNode = useMemo(
     () => nodes.find((node) => node.id === selectedNodeId) || null,
     [nodes, selectedNodeId]
@@ -189,6 +191,7 @@ export default function useWorkflow() {
       executingNodes,
       completedNodes,
       reset,
+      clearLog,
       importWorkflow,
       exportWorkflow,
     }),
@@ -214,6 +217,7 @@ export default function useWorkflow() {
       executingNodes,
       completedNodes,
       reset,
+      clearLog,
       importWorkflow,
       exportWorkflow,
     ]

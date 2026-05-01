@@ -45,6 +45,7 @@ export default function OrchestratorPage() {
     executingNodes,
     completedNodes,
     reset,
+    clearLog,
     importWorkflow,
     exportWorkflow,
   } = useWorkflow();
@@ -214,8 +215,9 @@ export default function OrchestratorPage() {
                 </div>
               ))}
               <button
+                className="secondary"
                 onClick={() => setVariables({ ...variables, [`var_${Object.keys(variables).length + 1}`]: "" })}
-                style={{ alignSelf: "flex-start" }}
+                style={{ alignSelf: "flex-start", marginTop: 8 }}
               >
                 + Add Variable
               </button>
@@ -242,7 +244,7 @@ export default function OrchestratorPage() {
         <div style={{ width: 360 }}>
           <NodeConfig node={selectedNode} onChange={updateNodeConfig} />
           <div style={{ height: 12 }} />
-          <ExecutionLog logs={executionLog} />
+          <ExecutionLog logs={executionLog} onClear={clearLog} />
           <div style={{ height: 12 }} />
           <ResultPanel result={result} />
           <HistoryPanel />

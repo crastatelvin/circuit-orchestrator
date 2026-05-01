@@ -9,7 +9,7 @@ export default function WorkflowControls({ executing, nodeCount, edgeCount, onRu
       <span style={{ color: "var(--muted)", fontSize: 12 }}>
         {nodeCount} nodes / {edgeCount} edges
       </span>
-      <button onClick={onClear}>Clear</button>
+      <button className="secondary" onClick={onClear}>Clear</button>
       <button onClick={onRun} disabled={executing || nodeCount === 0}>
         {executing ? "Running..." : "Run"}
       </button>

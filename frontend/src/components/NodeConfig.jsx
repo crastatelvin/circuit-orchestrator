@@ -3,11 +3,28 @@ export default function NodeConfig({ node, onChange }) {
 
   const update = (key, value) => onChange(node.id, { [key]: value });
 
+  const renderModelSelector = () => (
+    <div style={{ marginBottom: 12 }}>
+      <label style={{ color: "#cfd5ff" }}>LLM Model</label>
+      <select
+        value={node.config.model || "llama-3.1-8b-instant"}
+        onChange={(e) => update("model", e.target.value)}
+        style={{ width: "100%" }}
+      >
+        <option value="llama-3.1-8b-instant">Llama 3.1 8B (Fast)</option>
+        <option value="llama-3.1-70b-versatile">Llama 3.1 70B (Smart)</option>
+        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+        <option value="gemma2-9b-it">Gemma 2 9B</option>
+      </select>
+    </div>
+  );
+
   return (
     <div className="panel">
       <h3>Config - {node.label}</h3>
       {node.type === "prompt" && (
         <>
+          {renderModelSelector()}
           <label style={{ color: "#cfd5ff" }}>System prompt</label>
           <textarea
             value={node.config.system_prompt || ""}
@@ -26,6 +43,7 @@ export default function NodeConfig({ node, onChange }) {
       )}
       {node.type === "translate" && (
         <>
+          {renderModelSelector()}
           <label style={{ color: "#cfd5ff" }}>Target language</label>
           <input
             value={node.config.target_language || ""}
@@ -36,6 +54,7 @@ export default function NodeConfig({ node, onChange }) {
       )}
       {node.type === "summarize" && (
         <>
+          {renderModelSelector()}
           <label style={{ color: "#cfd5ff" }}>Length</label>
           <select value={node.config.length || "medium"} onChange={(e) => update("length", e.target.value)} style={{ width: "100%" }}>
             <option value="short">Short</option>
@@ -46,6 +65,7 @@ export default function NodeConfig({ node, onChange }) {
       )}
       {node.type === "classify" && (
         <>
+          {renderModelSelector()}
           <label style={{ color: "#cfd5ff" }}>Categories (comma separated)</label>
           <input
             value={(node.config.categories || []).join(", ")}
@@ -64,6 +84,7 @@ export default function NodeConfig({ node, onChange }) {
       )}
       {node.type === "transform" && (
         <>
+          {renderModelSelector()}
           <label style={{ color: "#cfd5ff" }}>Transform type</label>
           <input
             value={node.config.transform_type || "formal"}
@@ -80,6 +101,7 @@ export default function NodeConfig({ node, onChange }) {
       )}
       {node.type === "extract" && (
         <>
+          {renderModelSelector()}
           <label style={{ color: "#cfd5ff" }}>Fields (comma separated)</label>
           <input
             value={(node.config.fields || []).join(", ")}

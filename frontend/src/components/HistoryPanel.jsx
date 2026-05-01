@@ -25,7 +25,7 @@ export default function HistoryPanel() {
     <div className="panel" style={{ marginTop: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <h3>Execution History</h3>
-        <button onClick={load} disabled={loading}>{loading ? "..." : "Refresh"}</button>
+        <button className="secondary" onClick={load} disabled={loading}>{loading ? "..." : "Refresh"}</button>
       </div>
       <div style={{ maxHeight: 300, overflowY: "auto", fontSize: "0.9em" }}>
         {history.length === 0 && <p style={{ color: "var(--muted)" }}>No history yet.</p>}

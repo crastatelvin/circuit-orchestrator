@@ -53,3 +53,20 @@ def test_execute_requires_api_key_when_enabled(monkeypatch):
 
     with_key = client.post("/execute", json={"workflow": workflow}, headers={"X-API-Key": "secret-key"})
     assert with_key.status_code == 200
+
+
+def test_history_endpoint():
+    client = TestClient(app)
+    # First execute to populate history
+    workflow = {
+        "nodes": [{"id": "n1", "type": "input", "config": {}}, {"id": "n2", "type": "output", "config": {}}],
+        "edges": [{"source": "n1", "target": "n2"}],
+        "input": "history-test",
+    }
+    client.post("/execute", json={"workflow": workflow})
+    
+    response = client.get("/history")
+    assert response.status_code == 200
+    history = response.json()
+    assert len(history) > 0
+    assert history[0]["final_output"] == "history-test"

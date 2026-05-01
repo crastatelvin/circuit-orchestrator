@@ -12,7 +12,7 @@ export default function ResultPanel({ result }) {
   return (
     <div className="panel">
       <h3>Workflow Output</h3>
-      <button onClick={handleCopy}>{copied ? "Copied" : "Copy"}</button>
+      <button className="secondary" onClick={handleCopy}>{copied ? "Copied" : "Copy"}</button>
       <pre
         style={{
           whiteSpace: "pre-wrap",

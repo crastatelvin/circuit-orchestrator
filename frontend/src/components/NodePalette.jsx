@@ -7,6 +7,7 @@ const NODE_TYPES = [
   { type: "extract", label: "Extract", icon: "🔍", color: "#ff8fab" },
   { type: "transform", label: "Transform", icon: "⚙️", color: "#82ffc3" },
   { type: "filter", label: "Filter", icon: "🔽", color: "#ff9f1c" },
+  { type: "python", label: "Python Script", icon: "🐍", color: "#ffeaa7" },
   { type: "output", label: "Output", icon: "📤", color: "#b8c0ff" },
 ];
 

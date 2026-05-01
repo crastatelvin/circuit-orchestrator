@@ -11,3 +11,8 @@ REST handles execution requests while WebSocket streams live node progress updat
 
 ## Why split executor modules?
 Each node type is isolated to make it easier to test, extend, and debug without changing a large shared file.
+## Why SQLite for History?
+SQLite is used for execution history to ensure zero-config persistence that works out-of-the-box in local development environments.
+
+## Why Python Scripting Node?
+A Python node provides an escape hatch for complex logic that cannot be expressed via standard AI prompting nodes.
